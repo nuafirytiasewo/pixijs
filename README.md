@@ -54,10 +54,10 @@ module.exports = {
 ```
 
 6. Установил последнюю версию pixijs 7
-   ```
-   npm i pixi.js@7 --save-dev
-   ```
-8. Запустил
+```
+npm i pixi.js@7 --save-dev
+```
+7. Запустил
 
 ```
 npm start
