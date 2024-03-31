@@ -37,7 +37,7 @@ module.exports = {
 }
 ```
 
-5. Добавил в файл webpack.config.js данный код:
+5. Добавил в файл index.html данный код:
 
 ```
 <!DOCTYPE html>
