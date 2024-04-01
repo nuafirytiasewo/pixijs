@@ -27,7 +27,7 @@ const flySprite = new PIXI.Sprite(flyTexture);
 flySprite.anchor.set(0.5);
 
 // Устанавливаем размер мухи
-const scaleEye = 0.8;
+const scaleEye = 0.07;
 flySprite.scale.set(scaleEye, scaleEye);
 
 // Устанавливаем начальную позицию мухи
@@ -39,7 +39,7 @@ app.stage.addChild(flySprite);
 
 // Начальные параметры анимации
 let time = 0;
-const amplitude = 20; // Амплитуда колебаний мухи
+const amplitude = 50; // Амплитуда колебаний мухи
 const frequency = 0.02; // Частота колебаний мухи
 
 // Функция анимации
