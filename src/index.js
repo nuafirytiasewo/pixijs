@@ -1,91 +1,62 @@
-// Импортируем библиотеку PIXI.js
 import * as PIXI from 'pixi.js';
+import { startFlyGame } from './fly.js';
+import { startEyesGame } from './eyes.js';
+// Создаем приложение Pixi
+const app = new PIXI.Application({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    backgroundColor: 0x1099bb,
+});
 
-// Создаем новый экземпляр приложения PixiJS
-const app = new PIXI.Application({ background: '#1099bb', resizeTo: window });
+// Добавляем приложение на страницу
 document.body.appendChild(app.view);
 
-// Создаем контейнер для глаз
-const eyeContainer = new PIXI.Container();
+// Создаем текст для кнопок
+const buttonTextStyle = new PIXI.TextStyle({
+    fontFamily: 'Arial',
+    fontSize: 36,
+    fontStyle: 'italic',
+    fontWeight: 'bold',
+    fill: ['#ffffff', '#00ff99'], // градиент
+    stroke: '#4a1850',
+    strokeThickness: 5,
+    dropShadow: true,
+    dropShadowColor: '#000000',
+    dropShadowBlur: 4,
+    dropShadowAngle: Math.PI / 6,
+    dropShadowDistance: 6,
+    wordWrap: true,
+    wordWrapWidth: 440,
+});
 
-// Загружаем текстуры для глаз и зрачков
-const eyeTexture = PIXI.Texture.from('./src/images/eye.png');
-const pupilTexture = PIXI.Texture.from('./src/images/pupil.png');
+// Создаем кнопки
+const fly_button = new PIXI.Text('Муха', buttonTextStyle);
+fly_button.interactive = true;
+fly_button.buttonMode = true;
+fly_button.on('pointerdown', () => {
+    console.log('Муха');
+    // hideEyes();
+    // showFly();
+    startFlyGame(app);
+});
 
-// Создаем спрайты для зрачков
-const leftPupil = new PIXI.Sprite(pupilTexture);
-const rightPupil = new PIXI.Sprite(pupilTexture);
+const eyes_button = new PIXI.Text('Глаза', buttonTextStyle);
+eyes_button.interactive = true;
+eyes_button.buttonMode = true;
+eyes_button.on('pointerdown', () => {
+    console.log('Глаза');
+    // hideFly();
+    // showEyes();
+    startEyesGame(app);
+});
 
-// Устанавливаем "якорь" для зрачков в центр
-leftPupil.anchor.set(0.5);
-rightPupil.anchor.set(0.5);
+// Позиционируем кнопки
+fly_button.x = (app.screen.width - fly_button.width) / 2;
+fly_button.y = (app.screen.height - fly_button.height) / 2 - 100;
 
-// Создаем спрайты для левого и правого глаза
-const leftEye = new PIXI.Sprite(eyeTexture);
-const rightEye = new PIXI.Sprite(eyeTexture);
+eyes_button.x = (app.screen.width - eyes_button.width) / 2;
+eyes_button.y = (app.screen.height - eyes_button.height) / 2 + 100;
 
-// Устанавливаем "якорь" для глаз в центр
-leftEye.anchor.set(0.5);
-rightEye.anchor.set(0.5);
-
-// Устанавливаем размер глаз
-const scaleEye = 0.2
-leftEye.scale.set(scaleEye,scaleEye)
-rightEye.scale.set(scaleEye,scaleEye)
-
-// Расстояние между глазами
-const distance = 650 
-
-// Отношение размера к расстоянию
-const relation_distance = distance * scaleEye
-
-// Размещаем глаза рядом, по центру канваса
-leftEye.x = app.view.width / 2 - relation_distance;
-rightEye.x = app.view.width / 2 + relation_distance;
-leftEye.y = rightEye.y = app.view.height / 2;
-
-// Добавляем зрачки в глаза
-leftEye.addChild(leftPupil);
-rightEye.addChild(rightPupil);
-
-// Добавляем глаза и зрачки в контейнер
-eyeContainer.addChild(leftEye, rightEye);
-
-// Устанавливаем позицию контейнера на сцене
-eyeContainer.position.set(0, 0);
-
-// Добавляем контейнер на сцену приложения
-app.stage.addChild(eyeContainer);
-
-// Обработчик события перемещения мыши
-function onMouseMove(event) {
-    // Получаем позицию курсора мыши
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    // Определяем расстояние от центра глаза до позиции курсора мыши
-    const leftEyePosition = leftEye.toGlobal(new PIXI.Point());
-    const rightEyePosition = rightEye.toGlobal(new PIXI.Point());
-    const leftDistance = Math.sqrt((mouseX - leftEyePosition.x) ** 2 + (mouseY - leftEyePosition.y) ** 2);
-    const rightDistance = Math.sqrt((mouseX - rightEyePosition.x) ** 2 + (mouseY - rightEyePosition.y) ** 2);
-
-    // Ограничиваем позицию зрачков в пределах круга радиусом X px от центра глаза
-    const maxDistance = 180;
-    const leftClampedDistance = Math.min(leftDistance, maxDistance);
-    const rightClampedDistance = Math.min(rightDistance, maxDistance);
-
-    // Вычисляем новые позиции зрачков в пределах круга
-    const leftAngle = Math.atan2(mouseY - leftEyePosition.y, mouseX - leftEyePosition.x);
-    const rightAngle = Math.atan2(mouseY - rightEyePosition.y, mouseX - rightEyePosition.x);
-    const leftPupilX = leftEyePosition.x + Math.cos(leftAngle) * leftClampedDistance;
-    const leftPupilY = leftEyePosition.y + Math.sin(leftAngle) * leftClampedDistance;
-    const rightPupilX = rightEyePosition.x + Math.cos(rightAngle) * rightClampedDistance;
-    const rightPupilY = rightEyePosition.y + Math.sin(rightAngle) * rightClampedDistance;
-
-    // Устанавливаем новые позиции зрачков
-    leftPupil.position.set(leftPupilX - leftEyePosition.x, leftPupilY - leftEyePosition.y);
-    rightPupil.position.set(rightPupilX - rightEyePosition.x, rightPupilY - rightEyePosition.y);
-}
-
-// Добавляем обработчик события перемещения мыши
-window.addEventListener('mousemove', onMouseMove);
+// Добавляем кнопки на сцену
+app.stage.addChild(fly_button);
+app.stage.addChild(eyes_button);
