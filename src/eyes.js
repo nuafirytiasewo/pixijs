@@ -1,10 +1,12 @@
 // Импортируем библиотеку PIXI.js
 import * as PIXI from 'pixi.js';
 
+let eyeContainer; // Переменная для хранения ссылки на спрайты глаз
+
 //показываем глаза
 export function startEyesGame(app) {
     // Создаем контейнер для глаз
-    const eyeContainer = new PIXI.Container();
+    eyeContainer = new PIXI.Container();
 
     // Загружаем текстуры для глаз и зрачков
     const eyeTexture = PIXI.Texture.from('./src/images/eye.png');
@@ -88,4 +90,10 @@ export function startEyesGame(app) {
     // Добавляем обработчик события перемещения мыши
     window.addEventListener('mousemove', onMouseMove);
 
+}
+
+export function hideEyes(app) {
+    if (eyeContainer && app.stage.children.includes(eyeContainer)) {
+        app.stage.removeChild(eyeContainer);
+    }
 }

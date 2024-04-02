@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
-import { startFlyGame } from './fly.js';
-import { startEyesGame } from './eyes.js';
+import { startFlyGame, hideFly } from './fly.js';
+import { startEyesGame, hideEyes } from './eyes.js';
 // Создаем приложение Pixi
 const app = new PIXI.Application({
     width: window.innerWidth,
@@ -29,15 +29,22 @@ const buttonTextStyle = new PIXI.TextStyle({
     wordWrapWidth: 440,
 });
 
+let isFlyVisible = false; // Переменная для отслеживания видимости мухи
+let isEyesVisible = false; // Переменная для отслеживания видимости глаз
+
 // Создаем кнопки
 const fly_button = new PIXI.Text('Муха', buttonTextStyle);
 fly_button.interactive = true;
 fly_button.buttonMode = true;
 fly_button.on('pointerdown', () => {
-    console.log('Муха');
-    // hideEyes();
-    // showFly();
-    startFlyGame(app);
+    if (isEyesVisible) {
+        hideEyes(app);
+        isEyesVisible = false;
+    }
+    if (!isFlyVisible) {
+        startFlyGame(app);
+        isFlyVisible = true;
+    }
 });
 
 const eyes_button = new PIXI.Text('Глаза', buttonTextStyle);
@@ -45,17 +52,22 @@ eyes_button.interactive = true;
 eyes_button.buttonMode = true;
 eyes_button.on('pointerdown', () => {
     console.log('Глаза');
-    // hideFly();
-    // showEyes();
-    startEyesGame(app);
+    if (isFlyVisible) {
+        hideFly(app);
+        isFlyVisible = false;
+    }
+    if (!isEyesVisible) {
+        startEyesGame(app);
+        isEyesVisible = true;
+    }
 });
 
 // Позиционируем кнопки
-fly_button.x = (app.screen.width - fly_button.width) / 2;
-fly_button.y = (app.screen.height - fly_button.height) / 2 - 100;
+fly_button.x = (app.screen.width - fly_button.width) / 2 - 100;
+fly_button.y = (app.screen.height - fly_button.height) / 10;
 
-eyes_button.x = (app.screen.width - eyes_button.width) / 2;
-eyes_button.y = (app.screen.height - eyes_button.height) / 2 + 100;
+eyes_button.x = (app.screen.width - eyes_button.width) / 2 + 100;
+eyes_button.y = (app.screen.height - eyes_button.height) / 10;
 
 // Добавляем кнопки на сцену
 app.stage.addChild(fly_button);

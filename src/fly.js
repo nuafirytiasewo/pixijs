@@ -1,13 +1,13 @@
-// Импортируем библиотеку PIXI.js
+// fly.js
 import * as PIXI from 'pixi.js';
 
-//показываем муху
+let flySprite; // Переменная для хранения ссылки на спрайт мухи
+
 export function startFlyGame(app) {
-    
     const flyTexture = PIXI.Texture.from('./src/images/fly.png');
 
     // Создаем спрайт для мухи
-    const flySprite = new PIXI.Sprite(flyTexture);
+    flySprite = new PIXI.Sprite(flyTexture);
 
     // Устанавливаем "якорь" для мухи в центр
     flySprite.anchor.set(0.5);
@@ -44,3 +44,8 @@ export function startFlyGame(app) {
     animate();
 }
 
+export function hideFly(app) {
+    if (flySprite && app.stage.children.includes(flySprite)) {
+        app.stage.removeChild(flySprite);
+    }
+}
