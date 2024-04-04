@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            margin: 0px; /* убираем белые рамки */
+        }
+        /* Стили для канваса */
+        canvas {
+            position: fixed; /* Фиксированная позиция, чтобы канвас оставался прилипшим к верхнему левому углу окна */
+            top: 0; /* Разместить канвас вверху окна */
+            left: 0; /* Разместить канвас слева окна */
+            width: 100vw; /* Ширина канваса равна ширине окна браузера */
+            height: 100vh; /* Высота канваса равна высоте окна браузера */
+            overflow: hidden; /* Предотвращаем появление скроллбаров, если содержимое канваса выходит за его пределы */
+        }
+    </style>
 </head>
 <body>
     <script src="main.js"></script>

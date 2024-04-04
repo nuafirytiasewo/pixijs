@@ -1,10 +1,10 @@
-// fly.js
 import * as PIXI from 'pixi.js';
 
 let flySprite; // Переменная для хранения ссылки на спрайт мухи
 
+// Функция для запуска игры с мухой
 export function startFlyGame(app) {
-    const flyTexture = PIXI.Texture.from('./src/images/fly.png');
+    const flyTexture = PIXI.Texture.from('./src/images/fly.png'); // Загружаем текстуру мухи из файла
 
     // Создаем спрайт для мухи
     flySprite = new PIXI.Sprite(flyTexture);
@@ -13,14 +13,14 @@ export function startFlyGame(app) {
     flySprite.anchor.set(0.5);
 
     // Устанавливаем размер мухи
-    const scaleEye = 0.07;
-    flySprite.scale.set(scaleEye, scaleEye);
+    const scaleFly = 0.07;
+    flySprite.scale.set(scaleFly, scaleFly);
 
-    // Устанавливаем начальную позицию мухи
+    // Устанавливаем начальную позицию мухи в центре экрана
     flySprite.x = app.view.width / 2;
     flySprite.y = app.view.height / 2;
 
-    // Добавляем контейнер на сцену приложения
+    // Добавляем спрайт мухи на сцену приложения
     app.stage.addChild(flySprite);
 
     // Начальные параметры анимации
@@ -30,7 +30,12 @@ export function startFlyGame(app) {
 
     // Функция анимации
     function animate() {
-        // Изменяем вертикальную позицию мухи по синусоиде
+        // Вычисляем вертикальную позицию мухи на экране, используя синусоидальную функцию для создания эффекта колебания.
+        // - Начальная позиция мухи устанавливается в середину высоты экрана, чтобы муха начинала движение из центра.
+        // - Функция Math.sin() возвращает значение синуса угла, который изменяется со временем, создавая плавное колебание.
+        // - Значение синуса умножается на амплитуду, определяющую максимальное смещение мухи относительно ее базовой позиции.
+        // - Когда значение синуса равно 0, муха находится в базовой позиции. При увеличении значения синуса муха двигается вверх, а при уменьшении - вниз.
+        // - Таким образом, с течением времени (изменением переменной time) муха плавно изменяет свою вертикальную позицию, имитируя ее движение вверх и вниз.
         flySprite.y = app.view.height / 2 + Math.sin(time) * amplitude;
         
         // Увеличиваем время для следующего шага анимации
@@ -44,8 +49,11 @@ export function startFlyGame(app) {
     animate();
 }
 
+// Функция для скрытия спрайта мухи
 export function hideFly(app) {
+    // Проверяем, существует ли спрайт мухи и находится ли он на сцене приложения
     if (flySprite && app.stage.children.includes(flySprite)) {
+        // Если спрайт мухи существует и находится на сцене, удаляем его из сцены
         app.stage.removeChild(flySprite);
     }
 }
