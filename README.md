@@ -57,7 +57,14 @@ module.exports = {
 ```
 npm i pixi.js@7 --save-dev
 ```
-7. Запустил
+7. В файл package.json добавил (заменил) данный код:
+```
+"scripts": {
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack --mode production"
+  },
+```
+8. Запустил
 
 ```
 npm start
